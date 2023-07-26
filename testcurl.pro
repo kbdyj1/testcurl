@@ -10,10 +10,12 @@ SOURCES += \
         NetworkManager.cpp \
         Request.cpp \
         RequestHtml.cpp \
+        RequestMulti.cpp \
         main.cpp
 
 HEADERS += \
     ImageUploader.h \
     NetworkManager.h \
     Request.h \
-    RequestHtml.h
+    RequestHtml.h \
+    RequestMulti.h
