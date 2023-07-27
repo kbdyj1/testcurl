@@ -10,6 +10,8 @@ void test_get(const char* url, const char* filename)
     RequestHtml req(url);
     NetworkManager http;
 
+    req.enableProgress(true);
+
     auto ret = http.get(req);
     if (ret != 0) {
         cerr << "http.get(" << url << "): " << http.errorString(ret) << "\n";
@@ -48,10 +50,10 @@ void test_post_multi()
 int main()
 {
 #if (0) //done
-    test_get_image();
+    test_post_multi();
 #endif
 
-    test_post_multi();
+    test_get_image();
 
     return 0;
 }

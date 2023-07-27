@@ -6,6 +6,7 @@
 class RequestHtmlPrivate
 {
 public:
+    bool progress = false;
     std::string response;
 };
 
@@ -24,11 +25,32 @@ void RequestHtml::setupCallback(void *handle)
 {
     curl_easy_setopt((CURL*)handle, CURLOPT_WRITEFUNCTION, &RequestHtml::staticWriteCallback);
     curl_easy_setopt((CURL*)handle, CURLOPT_WRITEDATA, this);
+
+    if (d->progress) {
+        curl_easy_setopt((CURL*)handle, CURLOPT_NOPROGRESS, 0);
+        curl_easy_setopt((CURL*)handle, CURLOPT_PROGRESSDATA, this);
+        curl_easy_setopt((CURL*)handle, CURLOPT_PROGRESSFUNCTION, &RequestHtml::staticProgressCallback);
+    }
 }
 
 size_t RequestHtml::staticWriteCallback(void *data, size_t size, size_t nmemb, void *user)
 {
     return ((RequestHtml*)user)->writeCallback(data, size, nmemb);
+}
+
+int RequestHtml::staticProgressCallback(void *user, double dlTotal, double dlNow, double upTotal, double upNow)
+{
+    return ((RequestHtml*)user)->progressCallback(dlTotal, dlNow, upTotal, upNow);
+}
+
+int RequestHtml::progressCallback(double dlTotal, double dlNow, double upTotal, double upNow)
+{
+    std::cout << "progress(download: "
+              << (int)dlNow << "/" << (int)dlTotal
+              << ", upload: "
+              << (int)upNow << "/" << (int)upTotal << "\n";
+
+    return 0;
 }
 
 size_t RequestHtml::writeCallback(void *data, size_t size, size_t nmemb)
@@ -50,4 +72,9 @@ bool RequestHtml::write(const std::string &filename)
         return true;
     }
     return false;
+}
+
+void RequestHtml::enableProgress(bool b)
+{
+    d->progress = b;
 }
