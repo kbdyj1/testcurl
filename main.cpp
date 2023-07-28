@@ -47,13 +47,36 @@ void test_post_multi()
     }
 }
 
+void test_post()
+{
+    Request req;
+    req.setUrl("https://");
+    auto accept = std::string("accept: application/json");
+    req.addHeader(accept);
+    auto vin = std::string("");
+    req.addHeader(vin);
+    auto contentType = std::string("Content-Type: application/x-www-form-urlencoded");
+    req.addHeader(contentType);
+    auto data = std::string("");
+    req.addBody((void*)data.c_str(), data.length());
+
+    req.setVerbose(true);
+
+    NetworkManager http;
+    int ret = http.post(req);
+    if (ret) {
+       std::cout << http.errorString(ret) << "\n";
+    }
+}
+
 int main()
 {
 #if (0) //done
     test_post_multi();
+    test_get_image();
 #endif
 
-    test_get_image();
+    test_post();
 
     return 0;
 }

@@ -16,6 +16,8 @@ public:
     void addHeader(const std::string& header);
     void addBody(void* data, size_t dataSize);
 
+    void setVerbose(bool);
+
     virtual void setup(void* handle);
     virtual void setupCallback(void* handle);
     virtual int perform(void* handle);

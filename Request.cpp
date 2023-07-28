@@ -10,6 +10,7 @@ public:
     void* data = nullptr;
     size_t dataSize = 0;
     curl_slist* slist = nullptr;
+    bool verbose = false;
 };
 
 Request::Request(const std::string &url) : d(new RequestPrivate)
@@ -28,10 +29,20 @@ void Request::setUrl(const std::string &url)
     d->url = url;
 }
 
+void Request::addHeader(const std::string &header)
+{
+    d->headers.push_back(header);
+}
+
 void Request::addBody(void *data, size_t dataSize)
 {
     d->data = data;
     d->dataSize = dataSize;
+}
+
+void Request::setVerbose(bool b)
+{
+    d->verbose = b;
 }
 
 void Request::setup(void *p)
@@ -40,13 +51,25 @@ void Request::setup(void *p)
     if (handle) {
         curl_easy_setopt(handle, CURLOPT_URL, d->url.c_str());
 
-        for (const auto& header : d->headers) {
-            curl_slist_append(d->slist, header.c_str());
+        if (d->headers.size()) {
+            for (const auto& header : d->headers) {
+                d->slist = curl_slist_append(d->slist, header.c_str());
+            }
+
+            curl_easy_setopt(handle, CURLOPT_HTTPHEADER, d->slist);
         }
+
         if (d->data && d->dataSize) {
             curl_easy_setopt(handle, CURLOPT_POSTFIELDS, d->data);
             curl_easy_setopt(handle, CURLOPT_POSTFIELDSIZE, d->dataSize);
+
+            curl_easy_setopt(handle, CURLOPT_POST, 1L);
         }
+
+        curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, 0L);
+        curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, 0L);
+
+        curl_easy_setopt(handle, CURLOPT_VERBOSE, d->verbose ? 1L : 0L);
 
         setupCallback(handle);
     }
