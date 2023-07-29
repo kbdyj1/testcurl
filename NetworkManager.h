@@ -13,7 +13,7 @@ public:
     ~NetworkManager();
 
     int get(Request& req);
-    int post(Request& req);
+    int post(Request& req, void* data, size_t dataSize);
 
     const char* errorString(int error);
 

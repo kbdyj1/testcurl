@@ -18,7 +18,7 @@ public:
 
     void setVerbose(bool);
 
-    virtual void setup(void* handle);
+    virtual void setup(void* handle, void* data, size_t dataSize);
     virtual void setupCallback(void* handle);
     virtual int perform(void* handle);
 

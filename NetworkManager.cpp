@@ -36,15 +36,15 @@ int NetworkManager::get(Request &req)
 {
     d->reset();
 
-    req.setup(d->handle);
+    req.setup(d->handle, nullptr, 0);
     return req.perform(d->handle);
 }
 
-int NetworkManager::post(Request &req)
+int NetworkManager::post(Request &req, void* data, size_t dataSize)
 {
     d->reset();
 
-    req.setup(d->handle);
+    req.setup(d->handle, data, dataSize);
     return req.perform(d->handle);
 }
 

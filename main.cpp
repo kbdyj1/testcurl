@@ -41,7 +41,7 @@ void test_post_multi()
     multi.addBinary("body", data, 4);
 
     NetworkManager http;
-    int ret = http.post(multi);
+    int ret = http.post(multi, nullptr, 0);
     if (ret) {
         std::cout << "http.post(http://posthere.com): " << http.errorString(ret) << "\n";
     }
@@ -58,12 +58,11 @@ void test_post()
     auto contentType = std::string("Content-Type: application/x-www-form-urlencoded");
     req.addHeader(contentType);
     auto data = std::string("");
-    req.addBody((void*)data.c_str(), data.length());
 
     req.setVerbose(true);
 
     NetworkManager http;
-    int ret = http.post(req);
+    int ret = http.post(req, (void*)data.c_str(), data.size());
     if (ret) {
        std::cout << http.errorString(ret) << "\n";
     }

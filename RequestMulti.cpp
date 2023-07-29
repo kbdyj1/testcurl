@@ -48,7 +48,7 @@ void RequestMulti::addFile(const std::string& name, const std::string &filename)
     d->datas.push_back(Data{File, name, (void*)filename.c_str(), filename.size()});
 }
 
-void RequestMulti::setup(void *handle)
+void RequestMulti::setup(void *handle, void* data, size_t dataSize)
 {
     d->mime = curl_mime_init(handle);
     for (auto& data : d->datas) {

@@ -13,7 +13,7 @@ public:
 
     static size_t staticReadCallback(void* buf, size_t size, size_t nmemb, void* user);
 
-    void setup(void *handle) override;
+    void setup(void *handle, void* data, size_t dataSize) override;
     void setupCallback(void *handle) override;
     int perform(void *handle) override;
 

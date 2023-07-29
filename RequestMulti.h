@@ -15,7 +15,7 @@ public:
     void addBinary(const std::string& name, void* data, size_t dataSize);
     void addFile(const std::string& name, const std::string& filename);
 
-    void setup(void* handle) override;
+    void setup(void* handle, void* data, size_t dataSize) override;
     int perform(void *handle) override;
 
 private:

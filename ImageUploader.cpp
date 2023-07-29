@@ -42,9 +42,9 @@ size_t ImageUploader::staticReadCallback(void *buf, size_t size, size_t nmemb, v
     return total;
 }
 
-void ImageUploader::setup(void *handle)
+void ImageUploader::setup(void *handle, void* data, size_t dataSize)
 {
-    Request::setup(handle);
+    Request::setup(handle, data, dataSize);
 
     curl_easy_setopt(handle, CURLOPT_UPLOAD, 1L);
 }

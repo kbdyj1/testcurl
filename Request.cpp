@@ -7,8 +7,6 @@ class RequestPrivate
 public:
     std::string url;
     std::vector<std::string> headers;
-    void* data = nullptr;
-    size_t dataSize = 0;
     curl_slist* slist = nullptr;
     bool verbose = false;
 };
@@ -34,18 +32,12 @@ void Request::addHeader(const std::string &header)
     d->headers.push_back(header);
 }
 
-void Request::addBody(void *data, size_t dataSize)
-{
-    d->data = data;
-    d->dataSize = dataSize;
-}
-
 void Request::setVerbose(bool b)
 {
     d->verbose = b;
 }
 
-void Request::setup(void *p)
+void Request::setup(void *p, void* data, size_t dataSize)
 {
     CURL* handle = (CURL*)p;
     if (handle) {
@@ -59,9 +51,9 @@ void Request::setup(void *p)
             curl_easy_setopt(handle, CURLOPT_HTTPHEADER, d->slist);
         }
 
-        if (d->data && d->dataSize) {
-            curl_easy_setopt(handle, CURLOPT_POSTFIELDS, d->data);
-            curl_easy_setopt(handle, CURLOPT_POSTFIELDSIZE, d->dataSize);
+        if (data && dataSize) {
+            curl_easy_setopt(handle, CURLOPT_POSTFIELDS, data);
+            curl_easy_setopt(handle, CURLOPT_POSTFIELDSIZE, dataSize);
 
             curl_easy_setopt(handle, CURLOPT_POST, 1L);
         }
